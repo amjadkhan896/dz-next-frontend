@@ -1,6 +1,5 @@
 // this is the listing page of all orders
 import Header from "~/src/components/Header";
-import ProductItem from "~/src/components/ProductItem";
 
 export default async function OrdersPage({ searchParams }: { searchParams: { orderId?: string } }) {
   const { orderId } = searchParams;

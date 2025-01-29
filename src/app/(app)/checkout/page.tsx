@@ -15,6 +15,8 @@ export default function CheckoutPage() {
     city: "",
     postalCode: "",
   });
+  const [orderId, setOrderId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const handleInputChange = (e: { target: { name: any; value: any; }; }) => {
     setShipping({ ...shipping, [e.target.name]: e.target.value });
@@ -41,16 +43,20 @@ export default function CheckoutPage() {
         .then(response => response.json())
         .then(data => {
           if (data.success) {
-            alert("Payment successful!");
-            window.location.href = `/orders?orderId=${data.data.id}`;
+            setError(null);
+            setOrderId(data.data.id);
+            setTimeout(() => {
+              window.location.href = `/orders?orderId=${data.data.id}`;
+            }, 2000)
           } else {
-            alert("Payment failed: " + data.message);
+            setError(data.message);
           }
         })
         .catch(error => {
-          console.error('Error:', error);
-          alert("Payment failed: " + error.message);
+          setError(error.message);
         });
+
+
       clearCart();
       setLoading(false);
     }, 2000);
@@ -62,6 +68,18 @@ export default function CheckoutPage() {
       <div className="container mx-auto p-6 flex">
         <div className="w-fit p-4">
           <h1 className="text-3xl font-bold mb-6">Shipping Address</h1>
+          <div className="mt-4 space-y-2 mb-4">
+            {orderId && (
+              <div className="bg-green-100 p-4 rounded-lg">
+                <p className="text-green-700 font-semibold">Your order has been placed successfully. Your order ID is {orderId}</p>
+              </div>
+            )}
+            {error && (
+              <div className="bg-red-100 p-4 rounded-lg">
+                <p className="text-red-700 font-semibold">{error}</p>
+              </div>
+            )}
+          </div>
           <div className="space-y-3">
             <input
               type="text"
@@ -105,6 +123,8 @@ export default function CheckoutPage() {
                 className="w-full px-4 py-2 border rounded focus:ring focus:ring-blue-300"
               />
             </div>
+
+
 
             <div className="">
               <button

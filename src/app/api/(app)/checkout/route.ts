@@ -5,7 +5,6 @@ import { data, checkout } from '@/lib/api';
 export async function POST(request: NextRequest) {
   try {
     const payload: Partial<Checkout> = await request.json();
-    console.log(payload)
 
     if (!payload || !payload.products || !payload.products.length) {
       return NextResponse.json(
@@ -25,7 +24,6 @@ export async function POST(request: NextRequest) {
       { status: 200 },
     );
   } catch (error) {
-    console.error(error);
 
     return NextResponse.json(
       {
